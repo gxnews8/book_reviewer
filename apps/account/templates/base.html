@@ -1,0 +1,104 @@
+{% load staticfiles %}
+{% load ratings %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>{% block title %}{% endblock %}</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'star-ratings/css/star-ratings.css' %}">
+    <script type="text/javascript" src="{% static 'star-ratings/js/dist/star-ratings.min.js' %}"></script>
+</head>
+<body>
+  <div id="header">
+    <nav class="navbar navbar-default">
+      <div class="container">
+        <div class="navbar-header">
+         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false">
+           <span class="sr-only">Toggle navigation</span>
+           <span class="icon-bar"></span>
+           <span class="icon-bar"></span>
+           <span class="icon-bar"></span>
+         </button>
+         <a class="navbar-brand" href="#">Book|Reviewer</a>
+
+        </div><!-- end navbar-header -->
+
+        <div class="collapse navbar-collapse" id="navbar-collapse">
+          {% if request.user.is_authenticated %}
+
+            <ul class="nav navbar-nav">
+              <li {% if section == "dashboard" %}class="selected"{% endif %}>
+                <a href="{% url "dashboard" %}">Home</a></li>
+              <li {% if section == "review" %}class="selected"{% endif %}>
+                <a href="">Add Review</a></li>
+              <li {% if section == "people" %}class="selected"{% endif %}>
+                <a href="{% url "user_list" %}">People</a></li>
+                <li {% if section == "books" %}class="selected"{% endif %}>
+                  <a href="{% url "books:books-list" %}">Books</a></li>
+            </ul>
+            <!-- search  -->
+            <form class="navbar-form navbar-left">
+              <div class="form-group">
+                <input type="text" class="form-control" placeholder="Search books">
+              </div>
+              <button type="submit" class="btn btn-default">Submit</button>
+            </form>
+            <!-- user info dropdown  -->
+            <ul class="nav navbar-nav navbar-right">
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Signed in as {{ request.user.username }}<span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="{% url 'user_detail' user.username %}">View Profile</a></li>                  <li><a href="{% url "edit" %}">Edit Profile</a></li>
+                  <li><a href="{% url "books:book-add" %}">Add a book</a></li>
+
+                  <li role="separator" class="divider"></li>
+                  <li><a href="{% url "logout" %}">Logout</a></li>
+                </ul>
+              </li>
+            </ul>
+
+          {% else %}
+
+            <ul class="nav navbar-nav navbar-right">
+
+              <li><a href="{% url "register" %}">Register</a>
+              <li><a href="{% url "login" %}">Login</a></li>
+            </ul>
+          {% endif %}
+          </div> <!-- end collapse navbar collapse -->
+
+      </div><!-- end container -->
+    </nav>
+  </div><!-- end header -->
+
+
+  <!--Error messages  -->
+  {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+        {% if message.tags == 'error'%}
+          <div class="alert alert-danger">
+        {% else %}
+          <div class="alert alert-{{ message.tags }}">
+        {% endif %}
+          <li class="{{ message.tags }}">
+            {{ message|safe }}
+          </li>
+        </div>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+
+    <div class="container">
+
+      {% block content %}
+      {% ratings book.title  %}
+      {% endblock %}
+    </div>
+</body>
+</html>

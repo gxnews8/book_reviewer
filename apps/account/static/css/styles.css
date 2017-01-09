@@ -1,0 +1,9 @@
+label{
+  margin-top:4px;
+}
+.errorlist, .messages li{
+  list-style-type: none;
+}
+.glyphicon{
+  margin-top:-15px;
+}

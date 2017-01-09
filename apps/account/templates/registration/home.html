@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% block title %}Home page{% endblock %}
+
+{% block content %}
+<!--Registration Form  -->
+<div class="row">
+  <div class="col-md-5">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Register here</h3>
+        <span class="glyphicon glyphicon-pencil pull-right" aria-hidden="true"></span>
+      </div>
+      <div class="panel-body">
+        <form action="{% url 'register'%}" method="post">{% csrf_token %}
+          {% for field in register_form %}
+            <div class="form-group row">
+              <label for="id_{{ field.name }}" class="col-md-2 col-form-label">{{field.label}}:</label>
+              <div class="col-md-9 col-md-offset-1">
+                {{field|add_class:"form-control"}}
+                <p>{{ field.help_text }}</p>
+                {% if field.errors%}
+                  <div class="alert alert-danger" role="alert">
+                    {{field.errors}}
+                  </div>
+                {% endif %}
+              </div>
+
+            </div>
+            {% endfor %}
+
+          <p><button type="submit" class="btn btn-info btn-block">Create my account</button></p>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+<!--Log-in Form  -->
+
+
+
+  <div class="col-md-5 col-md-offset-2">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Log-in Here</h3>
+        <span class="glyphicon glyphicon-lock pull-right" aria-hidden="true"></span>
+      </div>
+      <div class="panel-body">
+
+        <!--Log-in Form Errors  -->
+
+        {% if login_form.errors %}
+          <div class="alert alert-danger" role="alert">
+            Your username and password didn't match. Please try again.
+          </div>
+        {% else %}
+          <p>Please use the following form to log-in</p>
+        {% endif %}
+
+        <!--Log-in Form  -->
+
+          <form action="{% url 'login' %}" method="post">
+            {% csrf_token %}
+            {% for field in login_form %}
+              <div class="form-group row">
+                <label for="id_{{ field.name }}" class="col-md-2 col-form-label">{{field.label}}: </label>
+                <div class="col-md-9 col-md-offset-1">
+                  {{field|add_class:"form-control"}}
+                </div>
+              </div>
+            {% endfor %}
+            <input type="hidden" name="next" value="{{ next }}">
+            <p><button type="submit" class="btn btn-info btn-block">Log-in</button></p>
+            <a href="{% url "password_reset" %}">Forgot your password?</a>
+          </form>
+          </div>
+      </div>
+    </div>
+</div>
+{% endblock %}
