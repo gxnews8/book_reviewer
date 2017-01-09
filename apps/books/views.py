@@ -48,7 +48,7 @@ def add_review(request,pk):
 
         return HttpResponseRedirect(reverse('books:book-detail',args=(pk,)))
 
-    return render(request,'books/book/review_add.html',{'review_form':review_form})
+    return render(request,'books/book/add_review.html',{'review_form':review_form})
 
 def book_search(request):
     pass
