@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Add Book{% endblock %}
+
+
+{% block content %}
+
+  <form action="#" method="post">
+  {% csrf_token %}
+  {% include 'form_template.html' %}
+
+    <p><button type="submit" class="btn btn-info btn-block">Add a book</button></p>
+  </form>
+
+{% endblock %}

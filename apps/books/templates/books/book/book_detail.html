@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load book_tags %}
+{% load ratings %}
+
+{% block title %}{{ book.title }}{% endblock %}
+
+{% block content %}
+
+  <p>Title : {{book.title}}</p>
+    {% ratings book %}
+
+  <p>Author(s) : {% for author in book.author.all %}{{ author }}{% endfor %}</p>
+  <p>Summary : {{ book.summary }}</p>
+  <p>Genre : {% for genre in book.genre.all %}{{ genre }}{% endfor %}</p>
+  <p>ISBN-13 : {{ book.isbn }}</p>
+
+  <h1>Reviews</h1>
+  {% with book.book_reviews.count as review_count%}
+  <h4>{{ review_count }} review{{ review_count|pluralize }}</h4>
+  {% endwith %}
+  {% for review in book.book_reviews.all %}
+  <p>Review {{forloop.counter }} by {{review.user}}</p>
+  {{review.created_at}}
+  <p>{{ review.user }}</p>
+  <p>{{ review.comment }}</p>
+  <p>{{ review }}</p>
+  {% empty %}
+    <p>There are no comments yet</p>
+  {% endfor %}
+
+  <h1>Add a <a href="{% url 'books:add-review' book.pk%}">review</a></h1>
+  {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+
+{% endblock %}

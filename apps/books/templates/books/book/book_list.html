@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load ratings %}
+
+{% block title %}Browse Books{% endblock %}
+
+{% block content %}
+  <ul>
+    {% for book in all_books %}
+      <li><a href="{% url 'books:book-detail' book.pk%}">{{book.title}}</a></li>
+
+      {% ratings book %}
+
+      <p>Summary: {{book.summary|truncatewords:40|linebreaks}}</p>
+      {% endfor %}
+      {% include "pagination.html"  %}
+  </ul>
+{% endblock %}

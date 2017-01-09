@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% block content %}
+  <form action="#" method="post">
+    {% csrf_token %}
+
+    {% for field in review_form %}
+      <div class="form-group row">
+        <label for="id_{{ field.name }}" class="col-md-2 col-form-label">{{field.label}}: </label>
+        <div class="col-md-9 col-md-offset-1">
+          {{field|add_class:"form-control"}}
+          <span class="text-danger small"> {{field.errors}}</span>
+        </div>
+      </div>
+    {% endfor %}
+
+
+      <p><button type="submit" class="btn btn-info btn-block">Save</button></p>
+{% endblock %}
